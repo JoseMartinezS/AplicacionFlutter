@@ -44,6 +44,33 @@ class _UsuarioState extends State<Usuario> {
     }
   }
 
+  void confirmDeleteUsuario(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación'),
+          content: Text('¿Estás seguro de que deseas eliminar este usuario?'),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                deleteUsuario(id);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +130,7 @@ class _UsuarioState extends State<Usuario> {
                     IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () =>
-                          deleteUsuario(usuario['idUsuario']),
+                          confirmDeleteUsuario(context, usuario['idUsuario']),
                     ),
                   ],
                 ),

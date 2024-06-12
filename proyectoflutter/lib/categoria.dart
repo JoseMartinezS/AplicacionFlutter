@@ -43,6 +43,33 @@ class _CategoriasState extends State<Categorias> {
     }
   }
 
+  void confirmDeleteCategoria(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación'),
+          content: Text('¿Estás seguro de que deseas eliminar esta categoría?'),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                deleteCategoria(id);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,8 +97,7 @@ class _CategoriasState extends State<Categorias> {
           return Column(
             children: [
               ListTile(
-                title: Text(' ${categoria['idCategoria']}  ${categoria['nombre']}'),
-               
+                title: Text('${categoria['idCategoria']} ${categoria['nombre']}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -89,7 +115,7 @@ class _CategoriasState extends State<Categorias> {
                     ),
                     IconButton(
                       icon: Icon(Icons.delete),
-                      onPressed: () => deleteCategoria(categoria['idCategoria']),
+                      onPressed: () => confirmDeleteCategoria(context, categoria['idCategoria']),
                     ),
                   ],
                 ),

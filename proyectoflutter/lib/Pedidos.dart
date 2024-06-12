@@ -31,7 +31,7 @@ class _PedidosState extends State<Pedidos> {
   }
 
   Future<void> deletePedido(int id) async {
-    final response = await http.put(Uri.parse('https://192.168.1.16:7019/api/Pedido/$id/CambiarEstatus'));
+    final response = await http.put(Uri.parse('https://192.168.1.12:7019/api/Pedido/$id/CambiarEstatus'));
 
     if (response.statusCode == 204) {
       setState(() {
@@ -41,6 +41,33 @@ class _PedidosState extends State<Pedidos> {
     } else {
       throw Exception('Failed to delete pedido');
     }
+  }
+
+  void confirmDeletePedido(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación'),
+          content: Text('¿Estás seguro de que deseas eliminar este Pedido?'),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                deletePedido(id);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -101,7 +128,8 @@ class _PedidosState extends State<Pedidos> {
                     ),
                     IconButton(
                       icon: Icon(Icons.delete),
-                      onPressed: () => deletePedido(pedido['idPedido']),
+                      onPressed: () =>
+                          confirmDeletePedido(context, pedido['idPedido']),
                     ),
                   ],
                 ),

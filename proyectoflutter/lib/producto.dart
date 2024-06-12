@@ -33,7 +33,7 @@ class _ProductoState extends State<Producto> {
 
   void deleteProduct(int id) async {
     final response = await http
-        .delete(Uri.parse('https://192.168.1.16:7019/api/Producto/$id'));
+        .delete(Uri.parse('https://192.168.1.12:7019/api/Producto/$id'));
 
     if (response.statusCode == 204) {
       setState(() {
@@ -42,6 +42,33 @@ class _ProductoState extends State<Producto> {
     } else {
       throw Exception('Failed to delete product');
     }
+  }
+
+  void confirmDeleteProduct(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación'),
+          content: Text('¿Estás seguro de que deseas eliminar este producto?'),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                deleteProduct(id);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -87,7 +114,6 @@ class _ProductoState extends State<Producto> {
                       'Stock: ${product['stock']}',
                       style: TextStyle(fontSize: 12),
                     ),
-                  
                   ],
                 ),
                 trailing: Row(
@@ -108,7 +134,7 @@ class _ProductoState extends State<Producto> {
                     IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () =>
-                          deleteProduct(product['idProducto']),
+                          confirmDeleteProduct(context, product['idProducto']),
                     ),
                   ],
                 ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'usuarios.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -69,6 +68,11 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
       if (response.statusCode == 201) {
         Navigator.pop(context, true); // Regresar a la lista de usuarios y actualizarla
+      } else if (response.statusCode == 400) {
+        setState(() {
+          _connectionMessage = 'El correo electrónico ya está registrado';
+          _isButtonDisabled = false; // Habilitar el botón después del error
+        });
       } else {
         setState(() {
           _connectionMessage = 'Error al registrar usuario';
@@ -114,7 +118,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
               decoration: InputDecoration(labelText: 'Rol'),
             ),
             SizedBox(height: 16.0),
-            Text(_connectionMessage),
+            Text(_connectionMessage, style: TextStyle(color: Colors.red)), // Mostrar mensaje de error en rojo
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _isButtonDisabled ? null : _registrarUsuario, // Deshabilitar el botón si está procesando

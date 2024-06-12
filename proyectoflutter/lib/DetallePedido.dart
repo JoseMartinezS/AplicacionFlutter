@@ -42,6 +42,33 @@ class _DetallePedidoState extends State<DetallePedido> {
     }
   }
 
+  void confirmDetallePedido(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación'),
+          content: Text('¿Estás seguro de que deseas eliminar este Pedido?'),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                deleteDetallePedido(id);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +131,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                     ),
                     IconButton(
                       icon: Icon(Icons.delete),
-                      onPressed: () => deleteDetallePedido(detallePedido['idDetallePedido']),
+                      onPressed: () => confirmDetallePedido(context, detallePedido['idDetallePedido']),
                     ),
                   ],
                 ),

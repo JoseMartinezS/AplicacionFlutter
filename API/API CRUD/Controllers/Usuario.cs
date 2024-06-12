@@ -41,11 +41,19 @@ namespace API_CRUD.Controllers
                 return BadRequest(ModelState);
             }
 
+            // Verificar si el correo ya está registrado
+            if (_context.Usuario.Any(u => u.correo == usuario.correo))
+            {
+                ModelState.AddModelError("Correo", "El correo electrónico ya está registrado.");
+                return BadRequest(ModelState);
+            }
+
             _context.Usuario.Add(usuario);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.idUsuario }, usuario);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizarUsuario(int id, [FromBody] Usuario usuario)

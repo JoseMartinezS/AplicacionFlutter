@@ -43,6 +43,33 @@ class _ClientesState extends State<Clientes> {
     }
   }
 
+  void confirmDeleteCliente(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación'),
+          content: Text('¿Estás seguro de que deseas eliminar este cliente?'),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                deleteCliente(id);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +123,7 @@ class _ClientesState extends State<Clientes> {
                     ),
                     IconButton(
                       icon: Icon(Icons.delete),
-                      onPressed: () => deleteCliente(cliente['idCliente']),
+                      onPressed: () => confirmDeleteCliente(context, cliente['idCliente']),
                     ),
                   ],
                 ),
